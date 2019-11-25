@@ -64,7 +64,7 @@ public class Datos extends javax.swing.JFrame {
 
         jLabel1.setText("Consulta");
 
-        jLabel2.setText("id:");
+        jLabel2.setText("Codigo de Barras");
 
         btNuevo.setText("Nuevo");
         btNuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -94,13 +94,13 @@ public class Datos extends javax.swing.JFrame {
             }
         });
 
-        jLabel3.setText("ID");
+        jLabel3.setText("Codigo de barras");
 
-        jLabel4.setText("Nombre");
+        jLabel4.setText("Producto");
 
-        jLabel5.setText("Usuario");
+        jLabel5.setText("Precio");
 
-        jLabel6.setText("Contraseña");
+        jLabel6.setText("Stock");
 
         btConsulta.setText("Consulta");
         btConsulta.addActionListener(new java.awt.event.ActionListener() {
@@ -143,7 +143,7 @@ public class Datos extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "ID", "Nombre", "Usuario", "Contraseña"
+                "Cod. Barras", "Producto", "Precio", "Stock"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -277,7 +277,7 @@ public class Datos extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Datos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String Insertar = "INSERT INTO usuarios(id,nombre,usuario,password)VALUES(?,?,?,?)";
+        String Insertar = "INSERT INTO productos(codigo_barras,nombre,precio,stock)VALUES(?,?,?,?)";
         PreparedStatement ps;
         try{
             ps=(PreparedStatement) conectar.prepareStatement(Insertar);
@@ -309,11 +309,11 @@ public class Datos extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Datos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        String sql = "UPDATE usuarios SET id=?,"
+        String sql = "UPDATE productos SET codigo_barras=?,"
                 +"nombre=?,"
-                +"usuario=?,"
-                +"password=?"
-                +"WHERE id='"+txId.getText()+"'";
+                +"precio=?,"
+                +"stock=?"
+                +"WHERE codigo_barras='"+txId.getText()+"'";
         PreparedStatement ps;
         try{
             ps=(PreparedStatement) conectar.prepareStatement(sql);
@@ -335,7 +335,7 @@ public class Datos extends javax.swing.JFrame {
     }//GEN-LAST:event_btModificarActionPerformed
 
     private void btEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btEliminarActionPerformed
-        int sure=JOptionPane.showConfirmDialog(null,"Estas seguro de eliminar este usuario?:"+txId.getText());
+        int sure=JOptionPane.showConfirmDialog(null,"Estas seguro de eliminar este producto?:"+txId.getText());
         if(sure==JOptionPane.YES_OPTION){
             
             Connection conectar = null;
@@ -351,7 +351,7 @@ public class Datos extends javax.swing.JFrame {
             Statement s;
             try{
                 s=conectar.createStatement();
-                int sql=s.executeUpdate("DELETE FROM usuarios WHERE id='"+txId.getText()+"'");
+                int sql=s.executeUpdate("DELETE FROM productos WHERE codigo_barras='"+txId.getText()+"'");
                 if(sql>0){
                     txId.setText("");
                     txNombre.setText("");
@@ -359,7 +359,7 @@ public class Datos extends javax.swing.JFrame {
                     txContra.setText("");
                 }
                 if(sql>0){
-                    JOptionPane.showMessageDialog(null,"Usuario Eliminado");
+                    JOptionPane.showMessageDialog(null,"Producto Eliminado");
                     Tabla();
                 }else{
                     JOptionPane.showMessageDialog(null,"ERROR");
@@ -384,7 +384,7 @@ public class Datos extends javax.swing.JFrame {
         String id=this.idConsulta.getText();
         try{
             Statement s=conectar.createStatement();
-            ResultSet rs=s.executeQuery("SELECT id,nombre,usuario,password FROM usuarios WHERE id='"+ id+"'");
+            ResultSet rs=s.executeQuery("SELECT codigo_barras,nombre,precio,stock FROM productos WHERE codigo_barras='"+ id+"'");
             if(rs.next()){
                 txId.setText(rs.getString(1));
                 txNombre.setText(rs.getString(2));
@@ -413,15 +413,15 @@ public class Datos extends javax.swing.JFrame {
         
         String []datos= new String[4];
         DefaultTableModel modelo=new DefaultTableModel();
-        modelo.addColumn("ID");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Usuario");
-        modelo.addColumn("Contraseña");
+        modelo.addColumn("Cod. Barras");
+        modelo.addColumn("Producto");
+        modelo.addColumn("Precio");
+        modelo.addColumn("Stock");
         
         try{
             Conexion conect = new Conexion();
             Statement st = conectar.createStatement();
-            ResultSet rs=st.executeQuery("SELECT * FROM usuarios");
+            ResultSet rs=st.executeQuery("SELECT * FROM productos");
             
             while(rs.next()){
                 datos[0]=rs.getString(1);
